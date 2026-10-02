@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zagazig 1937 vs Today</title>
+<meta name="description" content="Slide a 1937 Survey of Egypt map of Zagazig over today's streets and satellite imagery, then jump to Google Maps for places and reviews.">
+<meta property="og:title" content="Zagazig, 1937 → today">
+<meta property="og:description" content="The 1937 Survey of Egypt town plan of Zagazig, aligned to the modern city.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23b8860b'/%3E%3Cpath d='M6 22 L13 10 L19 18 L26 8' stroke='%23fff8e7' stroke-width='3' fill='none'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="map" aria-label="Map of Zagazig"></div>
+<div id="swipe" hidden></div>
+
+<aside id="panel">
+  <header>
+    <h1>Zagazig <span>1937 → today</span></h1>
+    <button id="infoBtn" aria-label="About this map">?</button>
+  </header>
+  <form id="search" role="search"><input id="q" type="search" placeholder="Search a place in Zagazig…" aria-label="Search a place"><ul id="results"></ul></form>
+  <div id="controls">
+    <div class="seg" role="group" aria-label="Compare mode">
+      <button data-mode="fade" class="on">Fade</button>
+      <button data-mode="swipe">Swipe</button>
+    </div>
+    <label id="fadeBox">1937 map <input id="op" type="range" min="0" max="1" step="0.01" value="0.6" aria-label="1937 map opacity"> <small id="opv">60%</small></label>
+    <div class="seg" role="group" aria-label="Modern basemap">
+      <button data-base="street" class="on">Street</button>
+      <button data-base="sat">Satellite</button>
+    </div>
+    <label class="chk"><input id="mul" type="checkbox"> Blend (multiply)</label>
+  </div>
+  <p class="tip">Tap anywhere on the map for Google Maps places, reviews and Street View.</p>
+</aside>
+
+<dialog id="about">
+  <h2>About this map</h2>
+  <p>The 1937 layer is the <em>Zagazig, Egypt–Town Series 1:5,000</em> plan published by the Survey of Egypt (Maṣlaḥat al-Misāḥah wa-al-Manājim), scanned by the American Geographical Society Library, University of Wisconsin–Milwaukee, via Wikimedia Commons. Public domain.</p>
+  <p>It is placed on the modern map using the scale printed on its own km grid, then checked against railways, canals and roads. Expect a few meters of difference in places; many canals have since been filled in and are now roads.</p>
+  <ul>
+    <li><b>Fade</b>: slide the 1937 map in and out over today.</li>
+    <li><b>Swipe</b>: drag the red bar to compare side by side.</li>
+    <li><b>Click</b> a spot to open it in Google Maps for places and reviews.</li>
+  </ul>
+  <p class="small">Modern map © OpenStreetMap contributors. Satellite © Esri. Search by Nominatim.</p>
+  <form method="dialog"><button>Close</button></form>
+</dialog>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
