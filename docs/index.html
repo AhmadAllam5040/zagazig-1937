@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#a8741a">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
 <title>Zagazig 1937 vs Today</title>
 <meta name="description" content="Slide a 1937 Survey of Egypt map of Zagazig over today's streets and satellite imagery, then jump to Google Maps for places and reviews.">
 <meta property="og:title" content="Zagazig, 1937 → today">
@@ -18,8 +21,13 @@
 <aside id="panel">
   <header>
     <h1>Zagazig <span>1937 → today</span></h1>
-    <button id="infoBtn" aria-label="About this map">?</button>
+    <span class="btns">
+      <button id="locBtn" aria-label="Show my location">◎</button>
+      <button id="infoBtn" aria-label="About this map">?</button>
+      <button id="toggle" aria-label="Show or hide controls" aria-expanded="true">▾</button>
+    </span>
   </header>
+  <div id="body">
   <form id="search" role="search"><input id="q" type="search" placeholder="Search a place in Zagazig…" aria-label="Search a place"><ul id="results"></ul></form>
   <div id="controls">
     <div class="seg" role="group" aria-label="Compare mode">
@@ -34,6 +42,7 @@
     <label class="chk"><input id="mul" type="checkbox"> Blend (multiply)</label>
   </div>
   <p class="tip">Tap anywhere on the map for Google Maps places, reviews and Street View.</p>
+  </div>
 </aside>
 
 <dialog id="about">

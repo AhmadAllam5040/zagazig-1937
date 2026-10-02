@@ -3,7 +3,9 @@ const CENTER = [30.5877, 31.5025], ZOOM = 15;
 
 // restore view from #zoom/lat/lng
 const h = location.hash.match(/^#(\d+)\/(-?[\d.]+)\/(-?[\d.]+)$/);
-const map = L.map('map', {minZoom: 12, maxZoom: 21}).setView(h ? [+h[2], +h[3]] : CENTER, h ? +h[1] : ZOOM);
+const phone = matchMedia('(max-width:600px)').matches;
+const map = L.map('map', {minZoom: 12, maxZoom: 21, zoomControl: false}).setView(h ? [+h[2], +h[3]] : CENTER, h ? +h[1] : (phone ? ZOOM - 1 : ZOOM));
+L.control.zoom({position: 'topright'}).addTo(map);
 
 const base = {
   street: L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 21, maxNativeZoom: 19, attribution: '© OpenStreetMap'}),
@@ -20,7 +22,9 @@ const old = L.tileLayer('tiles/{z}/{x}/{y}.webp', {
 
 // --- compare modes ---
 const bar = $('swipe'); let mode = 'fade', swipeX = innerWidth / 2;
-function clip() {
+let clipQ = 0;
+const clip = () => clipQ || (clipQ = requestAnimationFrame(() => { clipQ = 0; doClip(); }));  // one layout read per frame while panning
+function doClip() {
   const el = old.getContainer(); if (!el) return;
   if (mode !== 'swipe') { el.style.clipPath = ''; return; }
   const x = swipeX - el.getBoundingClientRect().left, B = 1e5;  // container has zero size: polygon in its local px
@@ -32,7 +36,7 @@ function show() {
   old.setOpacity(sw ? 1 : +$('op').value);
   old.getContainer().style.mixBlendMode = $('mul').checked ? 'multiply' : '';
   $('opv').textContent = Math.round($('op').value * 100) + '%';
-  clip();
+  doClip();
 }
 function seg(attr, fn) {
   document.querySelectorAll(`[${attr}]`).forEach(b => b.onclick = () => {
@@ -84,3 +88,15 @@ map.on('moveend', () => { const c = map.getCenter(); history.replaceState(null, 
 $('infoBtn').onclick = () => $('about').showModal();
 try { if (!localStorage.zgSeen) { localStorage.zgSeen = 1; $("about").showModal(); } } catch {}
 show();
+
+// --- phone UI: collapsible panel, keep map controls above it, locate-me ---
+const panel = document.querySelector('#panel');
+const setToggle = () => $('toggle').setAttribute('aria-expanded', !panel.classList.contains('min'));
+if (phone) panel.classList.add('min');
+$('toggle').onclick = () => { panel.classList.toggle('min'); setToggle(); };
+setToggle();
+new ResizeObserver(() => document.documentElement.style.setProperty('--panel-h', panel.offsetHeight + 'px')).observe(panel);
+let me;
+$('locBtn').onclick = () => map.locate({setView: true, maxZoom: 18, enableHighAccuracy: true});
+map.on('locationfound', e => { me && map.removeLayer(me); me = L.circle(e.latlng, {radius: e.accuracy, color: '#1a73e8', weight: 1}).addTo(map); gmPopup(e.latlng); });
+map.on('locationerror', () => alert('Could not get your location. Check that location is allowed for this site.'));
