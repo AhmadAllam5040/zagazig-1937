@@ -9,7 +9,7 @@ src = Image.open('zagazig_1937.jpg').convert('RGB').crop(CROP).convert('RGBA')
 ox, oy = CROP[0], CROP[1]
 pyr = [src]
 while pyr[-1].width > 600: pyr.append(pyr[-1].resize((pyr[-1].width//2, pyr[-1].height//2), Image.LANCZOS))
-shutil.rmtree('site/tiles', ignore_errors=True)
+shutil.rmtree('docs/tiles', ignore_errors=True)
 n = 0
 for z in range(12, 19):
     f = 2**(16-z); A = f/S                                        # scan px per tile px
@@ -24,5 +24,5 @@ for z in range(12, 19):
             X0, Y0 = scan(tx*256, ty*256)
             t = pyr[L].transform((256, 256), Image.AFFINE, (A/k, 0, X0/k, 0, A/k, Y0/k), Image.BICUBIC)
             if t.getchannel('A').getextrema()[1] == 0: continue
-            os.makedirs(f'site/tiles/{z}/{tx}', exist_ok=True); t.save(f'site/tiles/{z}/{tx}/{ty}.webp', quality=85); n += 1
+            os.makedirs(f'docs/tiles/{z}/{tx}', exist_ok=True); t.save(f'docs/tiles/{z}/{tx}/{ty}.webp', quality=85); n += 1
     print('z', z, n, flush=True)
